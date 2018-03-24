@@ -1,11 +1,11 @@
-import Compositor from "./compositor.js";
+
 import Entity from "./entity.js";
 import Timer from "./timer.js";
 import {loadLevel} from "./loaders.js";
 import {createMario} from "./entities.js";
-import {loadBackgroundSprites} from "./sprites.js";
-import {createBackgroundLayer, createSpriteLayer}  from "./layers.js";
-import Keyboard from "./keyboardstate.js";
+import {createCollisionLayer} from "./layers.js";
+import {setupKeyboard} from "./input.js"
+
 
 
 var canvas = document.getElementById("screen");
@@ -13,39 +13,38 @@ var context = canvas.getContext("2d");
 
 Promise.all([
     createMario(),
-    loadBackgroundSprites("screen"),
     loadLevel("1-1"),
-]).then(([mario,BackgroundSprites,level]) => {
+]).then(([mario,level]) => {
     
-    const comp = new Compositor();
-    const backgroundLayer = createBackgroundLayer(level.backgrounds,BackgroundSprites);
-    comp.layers.push(backgroundLayer);
+   
+    mario.pos.set(64,160);
     
-    const gravity = 2000;
-    mario.pos.set(64,180);
-    mario.vel.set(200,-600);
+    level.comp.layers.push(createCollisionLayer(level));
     
-    const SPACE = 32;
-const input = new Keyboard();
-
-input.addMapping(SPACE, keyState => {
-    if (keyState) {
-        mario.jump.start();
-    } else {
-        mario.jump.cancel();
-    }
-});
-input.listenTo(window)
+    level.entities.add(mario);
     
-    const spriteLayer = createSpriteLayer(mario);
-    comp.layers.push(spriteLayer);
+    const input = setupKeyboard(mario)
+    
+    
+input.listenTo(window);
+    
+    ["mousedown","mousemove"].forEach(eventName => {
+        canvas.addEventListener(eventName, event => {
+            //alert("You pressed button: " + event.button)
+            if (event.button==1){
+                mario.vel.set(0,0);
+                mario.pos.set(event.offsetX,event.offsetY);}
+            
+        })
+        })
+    
     
     const timer = new Timer(1/60)
     timer.update = function update(deltaTime) {
         
-        comp.draw(context);
-        mario.vel.y+=gravity*deltaTime;
-        mario.update(deltaTime);
+        level.comp.draw(context);
+        
+        level.update(deltaTime);
         
     };
     
