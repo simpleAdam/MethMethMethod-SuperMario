@@ -1,5 +1,7 @@
 # MethMethMethod-SuperMario
 
-Its obviously a (partial) copy of the code from the youtube channel MathMethMethod
+Its obviously a (partial) copy of the code from the youtube channel MathMethMethod, which I followed for learning purposees.
 
-full code is here: --  https://github.com/meth-meth-method/super-mario
+This particular version has the collsion code and some character movement
+
+The full code is here: --  https://github.com/meth-meth-method/super-mario
