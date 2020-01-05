@@ -1,6 +1,6 @@
 # MethMethMethod-SuperMario
 
-Its obviously a (partial) copy of the code from the youtube channel MathMethMethod, which I followed for learning purposes.
+Its obviously a (partial) copy of the code from the Youtube channel MethMethMethod, which I followed for learning purposes.
 
 This particular version has the collision code and some character movement
 
